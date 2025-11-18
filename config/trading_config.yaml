@@ -1,0 +1,259 @@
+# Trading Strategy Configuration
+
+portfolio:
+  initial_capital: 100000.0
+  currency: "USD"
+  max_positions: 10
+  allow_short: false
+
+signal_generation:
+  # Signal thresholds
+  buy_threshold: 0.02  # Minimum 2% predicted gain to generate buy signal
+  sell_threshold: -0.01  # Sell if predicted loss exceeds 1%
+  hold_range: [-0.01, 0.02]  # Hold if prediction in this range
+
+  # Signal strength
+  confidence_min: 0.6  # Minimum confidence to act on signal
+  strength_levels:
+    weak: [0.6, 0.7]
+    medium: [0.7, 0.85]
+    strong: [0.85, 1.0]
+
+  # Technical confirmation
+  require_technical_confirmation: true
+  technical_indicators:
+    rsi:
+      enabled: true
+      oversold: 30
+      overbought: 70
+    macd:
+      enabled: true
+      require_bullish: true  # For buy signals
+    volume:
+      enabled: true
+      min_relative_volume: 0.8  # 80% of average volume
+
+  # Filters
+  filters:
+    min_price: 5.0  # Minimum stock price
+    max_price: null  # No maximum
+    min_volume: 100000  # Minimum daily volume
+    min_market_cap: null  # No minimum market cap
+    exclude_penny_stocks: true
+
+risk_management:
+  # Position sizing
+  position_sizing:
+    method: "kelly_criterion"  # fixed_percentage, kelly_criterion, volatility_based, equal_weight
+
+    # Fixed percentage method
+    fixed_percentage: 0.05  # 5% of portfolio per position
+
+    # Kelly Criterion
+    kelly_fraction: 0.25  # Use quarter Kelly (conservative)
+    kelly_max_position: 0.10  # Maximum 10% even if Kelly suggests more
+
+    # Volatility-based
+    volatility_target: 0.15  # 15% annualized volatility target
+    volatility_window: 20  # days for volatility calculation
+
+    # Constraints
+    min_position_size: 0.01  # Minimum 1% of portfolio
+    max_position_size: 0.10  # Maximum 10% of portfolio
+
+  # Stop loss
+  stop_loss:
+    enabled: true
+    method: "percentage"  # percentage, atr, volatility
+
+    # Percentage method
+    percentage: 0.02  # 2% stop loss
+
+    # ATR method
+    atr_multiplier: 2.0
+    atr_period: 14
+
+    # Trailing stop
+    use_trailing_stop: false
+    trailing_stop_percentage: 0.03  # 3%
+    trailing_activation: 0.05  # Activate after 5% gain
+
+  # Take profit
+  take_profit:
+    enabled: true
+    method: "percentage"  # percentage, risk_reward, fibonacci
+
+    # Percentage method
+    percentage: 0.05  # 5% take profit
+
+    # Risk-reward method
+    risk_reward_ratio: 2.0  # 2:1 reward to risk
+
+    # Partial profit taking
+    use_partial_exits: true
+    exit_levels:
+      - level: 0.03  # 3% gain
+        sell_percent: 0.33  # Sell 33% of position
+      - level: 0.05  # 5% gain
+        sell_percent: 0.33  # Sell another 33%
+      # Remaining 34% exits at final take profit or stop loss
+
+  # Portfolio-level risk
+  portfolio_risk:
+    max_portfolio_risk: 0.20  # Maximum 20% of portfolio at risk
+    max_sector_exposure: 0.30  # Maximum 30% in one sector
+    max_correlation: 0.7  # Maximum correlation between positions
+
+    # Daily limits
+    max_daily_loss: 0.05  # Stop trading if daily loss exceeds 5%
+    max_daily_trades: 20
+
+    # Drawdown protection
+    max_drawdown_stop: 0.25  # Stop trading if drawdown exceeds 25%
+
+  # Position management
+  position_management:
+    max_holding_period: 90  # days
+    rebalance_frequency: "weekly"  # daily, weekly, monthly
+    auto_rebalance: false
+
+execution:
+  # Order types
+  default_order_type: "limit"  # market, limit, stop, stop_limit
+
+  # Market orders
+  market_orders:
+    use_for_exits: true
+    slippage_tolerance: 0.002  # 0.2%
+
+  # Limit orders
+  limit_orders:
+    default_offset: 0.001  # 0.1% from current price
+    timeout: 300  # seconds (cancel if not filled)
+
+  # Transaction costs
+  transaction_costs:
+    commission: 0.0  # Per trade (many brokers now zero commission)
+    slippage: 0.001  # 0.1% slippage
+    spread: 0.0005  # 0.05% bid-ask spread
+
+  # Execution timing
+  timing:
+    market_open_buffer: 15  # minutes after market open to trade
+    market_close_buffer: 15  # minutes before market close to trade
+    avoid_first_last_minutes: true
+
+strategy:
+  # Strategy type
+  type: "swing"  # day, swing, position
+
+  # Time horizon
+  holding_period:
+    min_days: 1
+    max_days: 30
+    target_days: 7
+
+  # Entry rules
+  entry:
+    confirmation_required: true
+    min_signals: 2  # Multiple indicators must agree
+    wait_for_pullback: false
+
+  # Exit rules
+  exit:
+    use_time_stop: true
+    time_stop_days: 30
+    trail_profit: true
+    exit_on_reversal: true
+
+  # Special conditions
+  special_conditions:
+    avoid_earnings: true
+    earnings_buffer_days: 2  # Don't trade 2 days before/after earnings
+    avoid_market_close_friday: true  # Avoid holding over weekend
+    require_uptrend: false  # Require overall uptrend for long positions
+
+backtesting:
+  # Initial settings
+  initial_capital: 100000.0
+  start_date: "2020-01-01"
+  end_date: "2024-01-01"
+
+  # Costs
+  commission: 0.0
+  slippage: 0.001
+
+  # Execution
+  fill_assumptions:
+    market_orders: "next_open"  # next_open, next_close, same_close
+    slippage_model: "percentage"  # percentage, volume_based
+
+  # Walk-forward
+  walk_forward:
+    enabled: true
+    train_period: 252  # days
+    test_period: 63  # days
+    retrain_frequency: 21  # days
+
+  # Performance metrics
+  benchmark: "SPY"  # Compare against S&P 500
+  risk_free_rate: 0.04  # 4% annual for Sharpe ratio
+
+  # Reporting
+  generate_report: true
+  save_trades: true
+  save_equity_curve: true
+
+monitoring:
+  # Live trading monitoring
+  performance_tracking:
+    track_real_time: true
+    update_frequency: 60  # seconds
+
+  # Alerts
+  alerts:
+    position_stop_hit: true
+    daily_loss_limit: true
+    unusual_volatility: true
+    correlation_breach: true
+
+  # Logging
+  logging:
+    log_all_signals: true
+    log_rejected_signals: true
+    log_position_changes: true
+    log_performance_metrics: true
+
+advanced:
+  # Machine learning for trading
+  ml_signal_adjustment:
+    enabled: false
+    model: "xgboost"
+    features:
+      - prediction_confidence
+      - technical_indicators
+      - volatility
+      - volume
+
+  # Regime detection
+  market_regime:
+    enabled: false
+    regimes:
+      - bull
+      - bear
+      - sideways
+    adjust_strategy_by_regime: true
+
+  # Sentiment analysis (future)
+  sentiment:
+    enabled: false
+    sources:
+      - news
+      - social_media
+    weight: 0.2  # 20% weight in signal generation
+
+  # Portfolio optimization
+  portfolio_optimization:
+    enabled: false
+    method: "mean_variance"  # mean_variance, risk_parity, black_litterman
+    rebalance_threshold: 0.05  # Rebalance if drift exceeds 5%

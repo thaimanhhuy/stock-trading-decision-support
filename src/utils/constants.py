@@ -1,0 +1,52 @@
+"""System-wide constants."""
+
+from typing import List
+
+# Time constants
+TRADING_DAYS_PER_YEAR = 252
+HOURS_PER_DAY = 24
+MINUTES_PER_HOUR = 60
+SECONDS_PER_MINUTE = 60
+SECONDS_PER_DAY = HOURS_PER_DAY * MINUTES_PER_HOUR * SECONDS_PER_MINUTE
+
+# Data constants
+DEFAULT_LOOKBACK_PERIOD = 252  # 1 year of trading days
+MIN_DATA_POINTS = 100
+DEFAULT_SEQUENCE_LENGTH = 60
+
+# Model constants
+MODEL_TYPES = ["arima", "lstm", "gru"]
+RANDOM_SEED = 42
+
+# Signal constants
+SIGNAL_BUY = "buy"
+SIGNAL_SELL = "sell"
+SIGNAL_HOLD = "hold"
+SIGNAL_TYPES: List[str] = [SIGNAL_BUY, SIGNAL_SELL, SIGNAL_HOLD]
+
+# Risk management constants
+DEFAULT_STOP_LOSS_PERCENT = 0.02  # 2%
+DEFAULT_TAKE_PROFIT_PERCENT = 0.05  # 5%
+DEFAULT_MAX_POSITION_SIZE = 0.10  # 10%
+DEFAULT_INITIAL_CAPITAL = 100000.0
+
+# Technical indicator constants
+RSI_OVERSOLD = 30
+RSI_OVERBOUGHT = 70
+RSI_PERIOD = 14
+
+MACD_FAST = 12
+MACD_SLOW = 26
+MACD_SIGNAL = 9
+
+BOLLINGER_PERIOD = 20
+BOLLINGER_STD = 2
+
+# API constants
+API_VERSION = "v1"
+API_PREFIX = f"/api/{API_VERSION}"
+
+# File extensions
+MODEL_EXTENSION = ".h5"
+SCALER_EXTENSION = ".pkl"
+DATA_EXTENSION = ".csv"

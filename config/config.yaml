@@ -1,0 +1,207 @@
+# Main Application Configuration
+
+application:
+  name: "Stock Trading Decision Support System"
+  version: "0.1.0"
+  environment: "development"  # development, staging, production
+  timezone: "UTC"
+
+data:
+  source: "yahoo_finance"
+  update_frequency: "daily"
+  lookback_period: 252  # trading days (approximately 1 year)
+  min_data_points: 500  # minimum data points required for training
+
+  # Data validation
+  validation:
+    check_missing: true
+    max_missing_percent: 0.05  # 5%
+    check_outliers: true
+    outlier_std_threshold: 5.0
+
+  # Data storage
+  storage:
+    format: "csv"  # csv, parquet, hdf5
+    compression: null  # gzip, bz2, xz, null
+
+  # Symbols configuration
+  symbols:
+    default: ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]
+    watchlist: []
+    exclude: []
+
+preprocessing:
+  # Normalization
+  normalization:
+    method: "standard"  # standard, minmax, robust
+    feature_range: [0, 1]
+
+  # Sequence creation
+  sequence_length: 60  # days of historical data for LSTM/GRU input
+  prediction_horizon: 1  # days ahead to predict
+
+  # Feature engineering
+  features:
+    price_features:
+      - close
+      - open
+      - high
+      - low
+    volume_features:
+      - volume
+    derived_features:
+      - returns
+      - log_returns
+      - price_change
+    technical_indicators: true
+
+technical_indicators:
+  # Moving Averages
+  sma:
+    enabled: true
+    periods: [5, 10, 20, 50, 200]
+  ema:
+    enabled: true
+    periods: [12, 26, 50]
+  wma:
+    enabled: false
+    periods: [10, 20]
+
+  # Momentum
+  rsi:
+    enabled: true
+    period: 14
+  stochastic:
+    enabled: true
+    k_period: 14
+    d_period: 3
+  roc:
+    enabled: true
+    period: 12
+
+  # Volatility
+  bollinger_bands:
+    enabled: true
+    period: 20
+    std_dev: 2
+  atr:
+    enabled: true
+    period: 14
+
+  # Trend
+  macd:
+    enabled: true
+    fast_period: 12
+    slow_period: 26
+    signal_period: 9
+  adx:
+    enabled: true
+    period: 14
+
+  # Volume
+  obv:
+    enabled: true
+  vwap:
+    enabled: true
+
+models:
+  # Training configuration
+  training:
+    validation_split: 0.15
+    test_split: 0.15
+    shuffle: false  # Don't shuffle time series data
+    random_state: 42
+
+  # Model selection
+  enabled_models:
+    - arima
+    - lstm
+    - gru
+
+  # Model persistence
+  save_models: true
+  model_versioning: true
+
+  # Retraining
+  auto_retrain: false
+  retrain_frequency: "monthly"  # daily, weekly, monthly
+  retrain_threshold: 0.15  # Retrain if performance drops 15%
+
+ensemble:
+  enabled: true
+  method: "weighted_average"  # weighted_average, voting, stacking
+  weights:
+    arima: 0.33
+    lstm: 0.34
+    gru: 0.33
+  dynamic_weighting: false  # Adjust weights based on recent performance
+  weighting_window: 30  # days for performance calculation
+
+system:
+  # Concurrency
+  num_workers: 4
+  use_multiprocessing: false
+
+  # Caching
+  cache_enabled: true
+  cache_ttl: 300  # seconds
+
+  # Performance
+  use_gpu: false
+  gpu_device: 0
+  mixed_precision: false
+
+  # Error handling
+  retry_attempts: 3
+  retry_delay: 5  # seconds
+  fail_fast: false
+
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "json"  # json, text
+  handlers:
+    - console
+    - file
+  file:
+    rotation: "daily"  # daily, size
+    retention_days: 30
+    max_size_mb: 100
+
+monitoring:
+  enabled: true
+  drift_detection:
+    enabled: true
+    method: "ks_test"  # ks_test, chi_square, psi
+    window_size: 30
+    threshold: 0.05
+  performance_tracking:
+    enabled: true
+    window_size: 30
+    alert_threshold: -0.10
+  audit_logging:
+    enabled: true
+    log_predictions: true
+    log_signals: true
+    log_trades: true
+
+notifications:
+  enabled: false
+  channels:
+    - email
+  email:
+    smtp_server: "smtp.gmail.com"
+    smtp_port: 587
+    use_tls: true
+  alerts:
+    drift_detected: true
+    performance_degradation: true
+    system_error: true
+    daily_summary: false
+
+mlflow:
+  enabled: false
+  experiment_name: "stock-trading"
+  tracking_uri: "./models/mlflow"
+  log_params: true
+  log_metrics: true
+  log_models: true
