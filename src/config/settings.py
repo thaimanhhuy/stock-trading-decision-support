@@ -25,11 +25,11 @@ class Settings(BaseSettings):
     model_scaler_path: str = Field(default="./models/scalers", env="MODEL_SCALER_PATH")
     log_path: str = Field(default="./logs", env="LOG_PATH")
 
-    # Trading
+    # Trading (values from thesis - SYSTEM_DESIGN.md)
     initial_capital: float = Field(default=100000.0, env="INITIAL_CAPITAL")
-    max_position_size: float = Field(default=0.05, env="MAX_POSITION_SIZE")
-    stop_loss_percent: float = Field(default=0.02, env="STOP_LOSS_PERCENT")
-    take_profit_percent: float = Field(default=0.05, env="TAKE_PROFIT_PERCENT")
+    max_position_size: float = Field(default=0.10, env="MAX_POSITION_SIZE")  # 10% from thesis
+    stop_loss_percent: float = Field(default=0.05, env="STOP_LOSS_PERCENT")  # 5% from thesis
+    take_profit_percent: float = Field(default=0.10, env="TAKE_PROFIT_PERCENT")  # 10% suggested
 
     # API
     api_host: str = Field(default="0.0.0.0", env="API_HOST")
