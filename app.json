@@ -1,0 +1,70 @@
+{
+  "name": "Stock Trading Decision Support System",
+  "description": "A comprehensive machine learning-based stock trading decision support system",
+  "keywords": [
+    "stock-trading",
+    "machine-learning",
+    "fastapi",
+    "python",
+    "lstm",
+    "arima",
+    "technical-analysis"
+  ],
+  "repository": "https://github.com/thaimanhhuy/stock-trading-decision-support",
+  "stack": "heroku-24",
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "APP_ENV": {
+      "description": "Application environment",
+      "value": "production",
+      "required": true
+    },
+    "DEBUG": {
+      "description": "Enable debug mode",
+      "value": "False",
+      "required": false
+    },
+    "API_HOST": {
+      "description": "API host",
+      "value": "0.0.0.0",
+      "required": true
+    },
+    "LOG_LEVEL": {
+      "description": "Logging level",
+      "value": "INFO",
+      "required": false
+    },
+    "INITIAL_CAPITAL": {
+      "description": "Initial trading capital",
+      "value": "100000",
+      "required": false
+    },
+    "MAX_POSITION_SIZE": {
+      "description": "Maximum position size as percentage of portfolio",
+      "value": "0.05",
+      "required": false
+    },
+    "STOP_LOSS_PERCENT": {
+      "description": "Stop loss percentage",
+      "value": "0.02",
+      "required": false
+    },
+    "TAKE_PROFIT_PERCENT": {
+      "description": "Take profit percentage",
+      "value": "0.05",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "image": "heroku/python",
+  "addons": []
+}
