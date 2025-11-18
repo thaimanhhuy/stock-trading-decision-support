@@ -9,12 +9,12 @@ from src.utils.constants import SIGNAL_BUY, SIGNAL_SELL, SIGNAL_HOLD
 class SignalGenerator(LoggerMixin):
     """Generate trading signals from predictions."""
 
-    def __init__(self, buy_threshold: float = 0.02, sell_threshold: float = -0.01):
+    def __init__(self, buy_threshold: float = 0.03, sell_threshold: float = -0.03):
         """Initialize signal generator.
 
         Args:
-            buy_threshold: Minimum predicted gain for buy signal
-            sell_threshold: Maximum predicted loss for sell signal
+            buy_threshold: Minimum predicted gain for buy signal (default 3% from thesis)
+            sell_threshold: Maximum predicted loss for sell signal (default -3% from thesis)
         """
         self.buy_threshold = buy_threshold
         self.sell_threshold = sell_threshold

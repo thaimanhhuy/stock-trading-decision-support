@@ -10,15 +10,15 @@ class RiskManager(LoggerMixin):
     def __init__(
         self,
         max_position_size: float = 0.10,
-        stop_loss_pct: float = 0.02,
-        take_profit_pct: float = 0.05,
+        stop_loss_pct: float = 0.05,
+        take_profit_pct: float = 0.10,
     ):
         """Initialize risk manager.
 
         Args:
-            max_position_size: Maximum position size as fraction of portfolio
-            stop_loss_pct: Stop loss percentage
-            take_profit_pct: Take profit percentage
+            max_position_size: Maximum position size as fraction of portfolio (10% from thesis)
+            stop_loss_pct: Stop loss percentage (5% from thesis)
+            take_profit_pct: Take profit percentage (10% suggested)
         """
         self.max_position_size = max_position_size
         self.stop_loss_pct = stop_loss_pct
