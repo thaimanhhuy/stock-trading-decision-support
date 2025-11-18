@@ -48,6 +48,7 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         case_sensitive = False
+        extra = "ignore"  # Allow extra fields from .env file
 
     def __init__(self, **kwargs):
         """Initialize settings."""
