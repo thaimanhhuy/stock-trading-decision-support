@@ -1,0 +1,52 @@
+# Test files
+tests/
+*.pyc
+__pycache__/
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Development tools
+.git/
+.gitignore
+.env.example
+*.ipynb
+notebooks/
+
+# Data files (these should be downloaded or generated on Heroku)
+data/raw/
+data/processed/
+data/features/
+data/backtest/
+
+# Model files (should be downloaded or generated)
+models/saved_models/
+models/scalers/
+models/mlflow/
+
+# Logs
+logs/
+
+# Docker files
+docker/
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Coverage reports
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
