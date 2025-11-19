@@ -19,8 +19,29 @@ logger = get_logger(__name__)
 
 def main():
     """Main function."""
-    parser = argparse.ArgumentParser(description="Download historical stock data")
-    parser.add_argument("--symbols", required=True, help="Comma-separated list of symbols")
+    parser = argparse.ArgumentParser(
+        description="Download historical stock data",
+        epilog="""
+Examples:
+  # US stocks
+  %(prog)s --symbols AAPL,MSFT,GOOGL --period 2y
+
+  # Vietnamese stocks (use .VN suffix for HOSE, .HNX for HNX)
+  %(prog)s --symbols VCB.VN,FPT.VN,CTG.VN,NVL.VN --period 2y
+
+  # Mixed markets
+  %(prog)s --symbols AAPL,VCB.VN,FPT.VN --start 2023-01-01 --end 2024-12-31
+
+  # Vietnamese banking sector
+  %(prog)s --symbols VCB.VN,CTG.VN,BID.VN,TCB.VN,MBB.VN --period 5y
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--symbols",
+        required=True,
+        help="Comma-separated list of symbols (e.g., AAPL,MSFT or VCB.VN,FPT.VN)"
+    )
     parser.add_argument("--start", default=None, help="Start date (YYYY-MM-DD)")
     parser.add_argument("--end", default=None, help="End date (YYYY-MM-DD)")
     parser.add_argument("--period", default="2y", help="Period (1y, 2y, 5y, max)")

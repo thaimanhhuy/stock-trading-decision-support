@@ -30,6 +30,62 @@ data:
     watchlist: []
     exclude: []
 
+  # Market-specific configurations
+  markets:
+    us:
+      timezone: "America/New_York"
+      currency: "USD"
+      trading_hours:
+        start: "09:30"
+        end: "16:00"
+      sample_symbols: ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]
+
+    vietnam:
+      timezone: "Asia/Ho_Chi_Minh"  # UTC+7
+      currency: "VND"
+      trading_hours:
+        morning:
+          start: "09:00"
+          end: "11:30"
+        afternoon:
+          start: "13:00"
+          end: "14:45"
+      # Yahoo Finance format: {SYMBOL}.VN for HOSE (Ho Chi Minh Stock Exchange)
+      # Yahoo Finance format: {SYMBOL}.HNX for HNX (Hanoi Stock Exchange)
+      sample_symbols:
+        # Banking sector
+        - "VCB.VN"   # Vietcombank - Ngân hàng TMCP Ngoại thương Việt Nam
+        - "CTG.VN"   # VietinBank - Ngân hàng TMCP Công Thương Việt Nam
+        - "BID.VN"   # BIDV - Ngân hàng TMCP Đầu tư và Phát triển Việt Nam
+        - "TCB.VN"   # Techcombank - Ngân hàng TMCP Kỹ thương Việt Nam
+        - "MBB.VN"   # MBBank - Ngân hàng TMCP Quân đội
+        - "ACB.VN"   # ACB - Ngân hàng TMCP Á Châu
+        - "VPB.VN"   # VPBank - Ngân hàng TMCP Việt Nam Thịnh Vượng
+
+        # Technology & Telecom
+        - "FPT.VN"   # FPT Corporation - Tập đoàn FPT
+        - "VNM.VN"   # Vinamilk - Công ty CP Sữa Việt Nam
+
+        # Real Estate
+        - "NVL.VN"   # Novaland - Tập đoàn Đầu tư Địa ốc No Va
+        - "VHM.VN"   # Vinhomes - Công ty CP Vinhomes
+        - "VIC.VN"   # Vingroup - Tập đoàn Vingroup
+
+        # Manufacturing & Industrial
+        - "HPG.VN"   # Hoa Phat Group - Tập đoàn Hòa Phát
+        - "GAS.VN"   # PV Gas - Tổng Công ty Khí Việt Nam
+        - "MSN.VN"   # Masan Group - Tập đoàn Masan
+        - "VHC.VN"   # Viet Nam Container - Công ty CP Vinalines
+
+        # Retail & Consumer
+        - "MWG.VN"   # Mobile World - Công ty CP Đầu tư Thế Giới Di Động
+        - "VRE.VN"   # Vincom Retail - Công ty CP Vincom Retail
+
+        # Securities
+        - "SSI.VN"   # SSI - Công ty CP Chứng khoán SSI
+        - "VND.VN"   # VNDirect - Công ty CP Chứng khoán VNDirect
+        - "HCM.VN"   # HCMC Securities - Công ty CP Chứng khoán TPHCM
+
 preprocessing:
   # Normalization
   normalization:

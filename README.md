@@ -41,6 +41,90 @@ This system provides:
 - Performance degradation alerts
 - Audit logging for compliance
 
+## Vietnamese Stock Market Support
+
+🇻🇳 **Hỗ trợ Thị trường Chứng khoán Việt Nam**
+
+The system now fully supports Vietnamese stocks through Yahoo Finance integration.
+
+### Supported Markets
+
+- **HOSE** (Ho Chi Minh Stock Exchange): Use `.VN` suffix
+  - Example: `VCB.VN`, `FPT.VN`, `CTG.VN`
+- **HNX** (Hanoi Stock Exchange): Use `.HNX` suffix
+  - Example: Stocks listed on HNX
+
+### Popular Vietnamese Stocks
+
+#### Banking Sector (Ngân hàng)
+- `VCB.VN` - Vietcombank
+- `CTG.VN` - VietinBank
+- `BID.VN` - BIDV
+- `TCB.VN` - Techcombank
+- `MBB.VN` - MBBank
+- `ACB.VN` - ACB
+
+#### Technology (Công nghệ)
+- `FPT.VN` - FPT Corporation
+
+#### Real Estate (Bất động sản)
+- `VIC.VN` - Vingroup
+- `VHM.VN` - Vinhomes
+- `NVL.VN` - Novaland
+
+#### Manufacturing (Sản xuất)
+- `HPG.VN` - Hoa Phat Group
+- `GAS.VN` - PV Gas
+
+#### Retail (Bán lẻ)
+- `MWG.VN` - Mobile World
+
+See `config/vietnam_stocks.yaml` for a comprehensive list of Vietnamese stocks organized by sector.
+
+### Quick Examples for Vietnamese Stocks
+
+```bash
+# Test Vietnamese stock data fetching
+python scripts/test_vietnamese_stocks.py
+
+# Download Vietnamese stock data
+python scripts/download_historical_data.py --symbols VCB.VN,FPT.VN,CTG.VN --period 2y
+
+# Download Vietnamese banking sector
+python scripts/download_historical_data.py --symbols VCB.VN,CTG.VN,BID.VN,TCB.VN,MBB.VN --period 5y
+
+# Train model for Vietnamese stocks
+python scripts/train_models.py --symbol VCB.VN --models lstm,gru
+
+# Run backtest on Vietnamese stock
+python scripts/run_backtest.py --symbol VCB.VN --start 2023-01-01 --end 2024-01-01
+
+# Mix US and Vietnamese stocks
+python scripts/download_historical_data.py --symbols AAPL,MSFT,VCB.VN,FPT.VN --period 1y
+```
+
+### Vietnamese Market Configuration
+
+The system includes market-specific configurations for Vietnam in `config/config.yaml`:
+- **Timezone**: Asia/Ho_Chi_Minh (UTC+7)
+- **Currency**: VND (Vietnamese Dong)
+- **Trading Hours**:
+  - Morning: 09:00 - 11:30
+  - Afternoon: 13:00 - 14:45
+
+### Important Notes for Vietnamese Stocks
+
+⚠️ **Lưu ý quan trọng**:
+- Vietnamese market has ±7% daily price limits (±10% for some stocks)
+- Settlement is T+2 (2 business days)
+- Foreign ownership limits typically range from 30-49%
+- Yahoo Finance data may have some delay
+- Always verify data before live trading
+
+For detailed Vietnamese stock information, see:
+- `config/vietnam_stocks.yaml` - Comprehensive stock listings by sector
+- `scripts/test_vietnamese_stocks.py` - Test script with examples
+
 ## Quick Start
 
 ### Prerequisites
@@ -162,6 +246,7 @@ Configuration files in `config/`:
 - `model_config.yaml` - Model hyperparameters
 - `trading_config.yaml` - Trading strategy parameters
 - `logging_config.yaml` - Logging configuration
+- `vietnam_stocks.yaml` - Vietnamese stock market configuration and listings
 
 ## Testing
 
