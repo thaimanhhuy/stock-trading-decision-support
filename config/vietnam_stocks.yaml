@@ -1,0 +1,316 @@
+# Vietnamese Stock Market Configuration
+# Cấu hình thị trường chứng khoán Việt Nam
+
+market_info:
+  name: "Vietnam Stock Market"
+  exchanges:
+    hose:
+      name: "Ho Chi Minh Stock Exchange"
+      code: "HOSE"
+      yahoo_suffix: ".VN"
+      description: "Sàn giao dịch Chứng khoán Thành phố Hồ Chí Minh"
+    hnx:
+      name: "Hanoi Stock Exchange"
+      code: "HNX"
+      yahoo_suffix: ".HNX"
+      description: "Sàn giao dịch Chứng khoán Hà Nội"
+    upcom:
+      name: "Unlisted Public Company Market"
+      code: "UPCOM"
+      yahoo_suffix: ".VN"
+      description: "Thị trường chứng khoán các công ty đại chúng chưa niêm yết"
+
+  timezone: "Asia/Ho_Chi_Minh"  # UTC+7
+  currency: "VND"
+
+  trading_hours:
+    order_matching:
+      morning:
+        start: "09:00"
+        end: "11:30"
+      afternoon:
+        start: "13:00"
+        end: "14:45"
+    continuous_trading:
+      morning:
+        start: "09:15"
+        end: "11:30"
+      afternoon:
+        start: "13:00"
+        end: "14:30"
+
+  trading_days:
+    weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    holidays:
+      - "New Year's Day"
+      - "Lunar New Year (Tet)"
+      - "Hung Kings' Commemoration"
+      - "Reunification Day"
+      - "International Labor Day"
+      - "National Day"
+
+# Popular Vietnamese Stocks by Sector
+# Các cổ phiếu Việt Nam phổ biến theo ngành
+
+sectors:
+  banking:
+    name: "Ngân hàng - Banking"
+    symbols:
+      - symbol: "VCB.VN"
+        name: "Vietcombank"
+        full_name: "Ngân hàng TMCP Ngoại thương Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "CTG.VN"
+        name: "VietinBank"
+        full_name: "Ngân hàng TMCP Công Thương Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "BID.VN"
+        name: "BIDV"
+        full_name: "Ngân hàng TMCP Đầu tư và Phát triển Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "TCB.VN"
+        name: "Techcombank"
+        full_name: "Ngân hàng TMCP Kỹ thương Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "MBB.VN"
+        name: "MBBank"
+        full_name: "Ngân hàng TMCP Quân đội"
+        market_cap: "Large Cap"
+
+      - symbol: "ACB.VN"
+        name: "ACB"
+        full_name: "Ngân hàng TMCP Á Châu"
+        market_cap: "Large Cap"
+
+      - symbol: "VPB.VN"
+        name: "VPBank"
+        full_name: "Ngân hàng TMCP Việt Nam Thịnh Vượng"
+        market_cap: "Large Cap"
+
+  technology:
+    name: "Công nghệ - Technology"
+    symbols:
+      - symbol: "FPT.VN"
+        name: "FPT Corporation"
+        full_name: "Tập đoàn FPT"
+        market_cap: "Large Cap"
+        note: "Leading IT & Telecom company"
+
+  consumer_goods:
+    name: "Hàng tiêu dùng - Consumer Goods"
+    symbols:
+      - symbol: "VNM.VN"
+        name: "Vinamilk"
+        full_name: "Công ty CP Sữa Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "MSN.VN"
+        name: "Masan Group"
+        full_name: "Tập đoàn Masan"
+        market_cap: "Large Cap"
+
+      - symbol: "SAB.VN"
+        name: "Sabeco"
+        full_name: "Tổng Công ty CP Bia - Rượu - NGK Sài Gòn"
+        market_cap: "Large Cap"
+
+  real_estate:
+    name: "Bất động sản - Real Estate"
+    symbols:
+      - symbol: "VIC.VN"
+        name: "Vingroup"
+        full_name: "Tập đoàn Vingroup"
+        market_cap: "Large Cap"
+
+      - symbol: "VHM.VN"
+        name: "Vinhomes"
+        full_name: "Công ty CP Vinhomes"
+        market_cap: "Large Cap"
+
+      - symbol: "NVL.VN"
+        name: "Novaland"
+        full_name: "Tập đoàn Đầu tư Địa ốc No Va"
+        market_cap: "Large Cap"
+
+      - symbol: "VRE.VN"
+        name: "Vincom Retail"
+        full_name: "Công ty CP Vincom Retail"
+        market_cap: "Large Cap"
+
+  manufacturing:
+    name: "Sản xuất - Manufacturing"
+    symbols:
+      - symbol: "HPG.VN"
+        name: "Hoa Phat Group"
+        full_name: "Tập đoàn Hòa Phát"
+        market_cap: "Large Cap"
+        note: "Steel manufacturing"
+
+      - symbol: "GAS.VN"
+        name: "PV Gas"
+        full_name: "Tổng Công ty Khí Việt Nam"
+        market_cap: "Large Cap"
+
+      - symbol: "VHC.VN"
+        name: "Vinalines Container"
+        full_name: "Công ty CP Vinalines"
+        market_cap: "Mid Cap"
+
+  retail:
+    name: "Bán lẻ - Retail"
+    symbols:
+      - symbol: "MWG.VN"
+        name: "Mobile World"
+        full_name: "Công ty CP Đầu tư Thế Giới Di Động"
+        market_cap: "Large Cap"
+        note: "Electronics & mobile retail"
+
+      - symbol: "FRT.VN"
+        name: "FPT Retail"
+        full_name: "Công ty CP Bán lẻ Kỹ thuật số FPT"
+        market_cap: "Mid Cap"
+
+  securities:
+    name: "Chứng khoán - Securities"
+    symbols:
+      - symbol: "SSI.VN"
+        name: "SSI"
+        full_name: "Công ty CP Chứng khoán SSI"
+        market_cap: "Large Cap"
+
+      - symbol: "VND.VN"
+        name: "VNDirect"
+        full_name: "Công ty CP Chứng khoán VNDirect"
+        market_cap: "Large Cap"
+
+      - symbol: "HCM.VN"
+        name: "HCMC Securities"
+        full_name: "Công ty CP Chứng khoán TPHCM"
+        market_cap: "Mid Cap"
+
+  aviation:
+    name: "Hàng không - Aviation"
+    symbols:
+      - symbol: "HVN.VN"
+        name: "Vietnam Airlines"
+        full_name: "Tổng Công ty Hàng không Việt Nam"
+        market_cap: "Large Cap"
+
+# Pre-configured portfolios
+# Danh mục đầu tư được cấu hình sẵn
+
+portfolios:
+  vnindex_top10:
+    name: "VN-Index Top 10"
+    description: "10 cổ phiếu có vốn hóa lớn nhất trên HOSE"
+    symbols:
+      - "VCB.VN"
+      - "VIC.VN"
+      - "VHM.VN"
+      - "GAS.VN"
+      - "HPG.VN"
+      - "CTG.VN"
+      - "BID.VN"
+      - "MBB.VN"
+      - "VNM.VN"
+      - "MSN.VN"
+
+  banking_sector:
+    name: "Banking Sector"
+    description: "Nhóm cổ phiếu ngân hàng"
+    symbols:
+      - "VCB.VN"
+      - "CTG.VN"
+      - "BID.VN"
+      - "TCB.VN"
+      - "MBB.VN"
+      - "ACB.VN"
+      - "VPB.VN"
+
+  technology_growth:
+    name: "Technology & Growth"
+    description: "Nhóm cổ phiếu công nghệ và tăng trưởng"
+    symbols:
+      - "FPT.VN"
+      - "MWG.VN"
+      - "VRE.VN"
+      - "FRT.VN"
+
+  real_estate_blue_chips:
+    name: "Real Estate Blue Chips"
+    description: "Nhóm cổ phiếu bất động sản vốn hóa lớn"
+    symbols:
+      - "VIC.VN"
+      - "VHM.VN"
+      - "NVL.VN"
+      - "VRE.VN"
+
+  diversified:
+    name: "Diversified Portfolio"
+    description: "Danh mục đa dạng ngành nghề"
+    symbols:
+      - "VCB.VN"   # Banking
+      - "FPT.VN"   # Technology
+      - "VNM.VN"   # Consumer Goods
+      - "VHM.VN"   # Real Estate
+      - "HPG.VN"   # Manufacturing
+      - "GAS.VN"   # Energy
+      - "MWG.VN"   # Retail
+      - "SSI.VN"   # Securities
+
+# Usage examples
+# Ví dụ sử dụng
+
+usage_examples:
+  download_single_stock:
+    description: "Tải dữ liệu một cổ phiếu"
+    command: "python scripts/download_historical_data.py --symbols VCB.VN"
+
+  download_multiple_stocks:
+    description: "Tải dữ liệu nhiều cổ phiếu"
+    command: "python scripts/download_historical_data.py --symbols VCB.VN,FPT.VN,CTG.VN,NVL.VN"
+
+  download_portfolio:
+    description: "Tải dữ liệu danh mục đầu tư"
+    command: "python scripts/download_historical_data.py --symbols VCB.VN,CTG.VN,BID.VN,TCB.VN,MBB.VN --period 2y"
+
+  train_model:
+    description: "Huấn luyện mô hình cho cổ phiếu Việt Nam"
+    command: "python scripts/train_model.py --symbols VCB.VN --models lstm,gru"
+
+  run_backtest:
+    description: "Chạy backtest cho cổ phiếu Việt Nam"
+    command: "python scripts/backtest.py --symbols VCB.VN --strategy moving_average"
+
+# Important notes for Vietnamese stocks
+# Lưu ý quan trọng khi giao dịch cổ phiếu Việt Nam
+
+notes:
+  yahoo_finance_format:
+    - "Sử dụng định dạng {SYMBOL}.VN cho HOSE (Sàn HOSE)"
+    - "Sử dụng định dạng {SYMBOL}.HNX cho HNX (Sàn HNX)"
+    - "Ví dụ: VCB.VN, FPT.VN, CTG.VN"
+
+  price_limits:
+    - "Thị trường Việt Nam có biên độ giao dịch ±7% (±10% cho một số mã)"
+    - "Giá tham chiếu được tính từ giá đóng cửa phiên trước"
+    - "Giá trần = Giá tham chiếu + 7%"
+    - "Giá sàn = Giá tham chiếu - 7%"
+
+  trading_rules:
+    - "Khớp lệnh định kỳ (ATO/ATC): 09:00-09:15 và 14:30-14:45"
+    - "Khớp lệnh liên tục: 09:15-11:30 và 13:00-14:30"
+    - "Đơn vị giao dịch: 10 cổ phiếu cho lô lẻ, 100 cổ phiếu cho lô chẵn"
+
+  settlement:
+    - "T+2: Thời gian thanh toán là 2 ngày làm việc sau ngày giao dịch"
+    - "Room ngoại: Hạn mức sở hữu nước ngoài (thường 30-49%)"
+
+  data_quality:
+    - "Dữ liệu từ Yahoo Finance có thể có độ trễ"
+    - "Nên sử dụng nhiều nguồn dữ liệu để xác minh"
+    - "Kiểm tra dữ liệu trước khi giao dịch thực tế"
