@@ -1,52 +1,183 @@
 version: '3.8'
 
+# Stock Trading Decision Support System - Docker Compose Configuration
+# This file orchestrates the backend API, dashboard, and optional training service
+
 services:
+  # ============= API Service =============
+  # FastAPI backend with ML models for predictions and signals
   api:
     build:
       context: ..
       dockerfile: docker/Dockerfile.api
+    container_name: trading-api
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
     volumes:
+      # Persistent data storage
       - ../data:/app/data
       - ../models:/app/models
       - ../logs:/app/logs
-      - ../.env:/app/.env
+      # Configuration files
+      - ../config:/app/config
+      - ../.env:/app/.env:ro  # Read-only environment file
     environment:
-      - APP_ENV=production
+      - APP_ENV=${APP_ENV:-production}
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PYTHONUNBUFFERED=1
+    networks:
+      - trading-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
 
+  # ============= Dashboard Service =============
+  # Streamlit dashboard for visualization and monitoring
   dashboard:
     build:
       context: ..
       dockerfile: docker/Dockerfile.dashboard
+    container_name: trading-dashboard
     ports:
-      - "8501:8501"
+      - "${DASHBOARD_PORT:-8501}:8501"
     volumes:
-      - ../data:/app/data
-      - ../models:/app/models
-      - ../.env:/app/.env
-    depends_on:
-      - api
+      # Share data and models with API
+      - ../data:/app/data:ro  # Read-only access
+      - ../models:/app/models:ro  # Read-only access
+      - ../logs:/app/logs:ro  # Read-only access
+      - ../config:/app/config:ro
+      - ../.env:/app/.env:ro
     environment:
-      - APP_ENV=production
+      - APP_ENV=${APP_ENV:-production}
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+      - API_BASE_URL=http://api:8000
+    networks:
+      - trading-network
+    depends_on:
+      api:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
 
+  # ============= Training Service (Optional) =============
+  # Service for scheduled model training and retraining
+  # Use: docker-compose --profile training up
   training:
     build:
       context: ..
       dockerfile: docker/Dockerfile.training
+    container_name: trading-training
     volumes:
       - ../data:/app/data
       - ../models:/app/models
       - ../logs:/app/logs
-      - ../.env:/app/.env
+      - ../config:/app/config
+      - ../.env:/app/.env:ro
     environment:
-      - APP_ENV=production
+      - APP_ENV=${APP_ENV:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PYTHONUNBUFFERED=1
+    networks:
+      - trading-network
     profiles:
       - training
+    # Training jobs are typically run on-demand or via cron
+    # Override command as needed:
+    # docker-compose run training python scripts/train_models.py --symbols AAPL,MSFT
+    command: ["python", "scripts/train_models.py", "--help"]
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
 
+  # ============= Future: Database Service =============
+  # Uncomment when implementing database storage
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: trading-db
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER:-trading_user}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-trading_password}
+  #     POSTGRES_DB: ${POSTGRES_DB:-trading}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - trading-network
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-trading_user}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+  # ============= Future: Redis Cache =============
+  # Uncomment when implementing caching layer
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: trading-redis
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - trading-network
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+# ============= Networks =============
+networks:
+  trading-network:
+    driver: bridge
+    name: trading-network
+
+# ============= Volumes =============
 volumes:
-  data:
-  models:
-  logs:
+  # Named volumes for persistent data (currently using bind mounts)
+  # Uncomment if you prefer named volumes over bind mounts
+  # data:
+  #   driver: local
+  # models:
+  #   driver: local
+  # logs:
+  #   driver: local
+  # postgres_data:
+  #   driver: local
+  # redis_data:
+  #   driver: local

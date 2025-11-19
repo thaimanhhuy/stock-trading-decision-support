@@ -137,7 +137,6 @@ Thumbs.db
 *~
 
 # Docker
-.dockerignore
 **/__pycache__/
 **/.pytest_cache/
 

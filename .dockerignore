@@ -1,0 +1,125 @@
+# Stock Trading Decision Support - Docker Ignore File
+# Files and directories to exclude from Docker build context
+
+# ============= Git =============
+.git
+.gitignore
+.gitattributes
+.github
+
+# ============= Python =============
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============= Virtual Environments =============
+venv/
+ENV/
+env/
+.venv
+
+# ============= IDE =============
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ============= Testing =============
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+.tox/
+nosetests.xml
+coverage.xml
+*.mo
+*.pot
+
+# ============= Documentation =============
+*.md
+!README.md
+docs/
+*.rst
+*.txt
+!requirements.txt
+
+# ============= Data & Models (use volumes instead) =============
+data/raw/*
+data/processed/*
+data/features/*
+data/backtest/*
+!data/.gitkeep
+models/saved_models/*
+models/scalers/*
+models/mlflow/*
+!models/.gitkeep
+
+# ============= Logs =============
+logs/*
+*.log
+!logs/.gitkeep
+
+# ============= Docker =============
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# ============= CI/CD =============
+.github/
+.gitlab-ci.yml
+.travis.yml
+azure-pipelines.yml
+
+# ============= Environment =============
+.env
+.env.*
+!.env.example
+
+# ============= Temporary Files =============
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# ============= OS Files =============
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ============= Heroku =============
+.slugignore
+Procfile
+app.json
+runtime.txt
+HEROKU_DEPLOYMENT.md
+
+# ============= Project Specific =============
+notebooks/
+*.ipynb
+.ipynb_checkpoints/
+experiments/
+sandbox/
