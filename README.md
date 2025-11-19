@@ -24,6 +24,10 @@ This system provides:
 - **LSTM**: Deep learning model for sequential data
 - **GRU**: Efficient recurrent neural network
 - Ensemble prediction combining both models
+- **Automatic Retraining**:
+  - Scheduled retraining every 3 months
+  - Market event-based retraining (triggers when market drops >5%)
+  - Manual retraining via API or command line
 
 ### Trading Engine
 - Signal generation based on model predictions and technical indicators
@@ -123,6 +127,101 @@ The system includes market-specific configurations for Vietnam in `config/config
 For detailed Vietnamese stock information, see:
 - `config/vietnam_stocks.yaml` - Comprehensive stock listings by sector
 - `scripts/test_vietnamese_stocks.py` - Test script with examples
+
+## Model Retraining Features
+
+🔄 **Automatic Model Retraining System**
+
+The system includes comprehensive model retraining capabilities to keep models up-to-date with market conditions:
+
+### 1. Scheduled Retraining
+- **Automatic retraining every 3 months** with the latest data
+- Runs daily checks at 2:00 AM (UTC)
+- Configurable monitoring symbols and intervals
+- Full training history tracking
+
+### 2. Market Event-Based Retraining
+- **Triggers when market drops >5%** over a 5-day period
+- Monitors:
+  - US Market: S&P 500 (^GSPC)
+  - Vietnam Market: VN-Index or proxy stocks
+- Automatic detection and model retraining
+- Customizable thresholds and lookback periods
+
+### 3. Manual Retraining
+- **REST API endpoints** for on-demand training
+- **Command-line interface** for batch operations
+- **Python API** for programmatic access
+- Single or batch symbol training
+
+### Quick Retraining Examples
+
+**Manual training via API:**
+```bash
+# Train a single symbol
+curl -X POST http://localhost:8000/api/v1/training/train \
+  -H "Content-Type: application/json" \
+  -d '{"symbol": "AAPL", "models": "all", "fetch_new_data": true}'
+
+# Batch training
+curl -X POST http://localhost:8000/api/v1/training/batch-train \
+  -H "Content-Type: application/json" \
+  -d '{"symbols": ["AAPL", "MSFT", "VCB.VN"], "models": "all"}'
+
+# Start the scheduler
+curl -X POST http://localhost:8000/api/v1/scheduler/start
+
+# Check scheduler status
+curl http://localhost:8000/api/v1/scheduler/status
+```
+
+**Check market conditions:**
+```bash
+# Check US market for drop events
+curl "http://localhost:8000/api/v1/market/check/us?threshold=5.0"
+
+# Check Vietnam market
+curl "http://localhost:8000/api/v1/market/check/vietnam?threshold=5.0"
+
+# View market event history
+curl "http://localhost:8000/api/v1/market/events?limit=50"
+```
+
+**View training history:**
+```bash
+# Get training history for a symbol
+curl http://localhost:8000/api/v1/training/history/AAPL
+
+# Get training statistics
+curl http://localhost:8000/api/v1/training/stats
+```
+
+### Configuration
+
+Configure retraining in `config/config.yaml`:
+
+```yaml
+models:
+  auto_retrain: true
+  retrain_interval_months: 3
+
+  market_event_retraining:
+    enabled: true
+    check_interval_hours: 24
+    drop_threshold_percentage: 5.0
+    lookback_days: 5
+
+  monitored_symbols:
+    - "AAPL"
+    - "MSFT"
+    - "VCB.VN"
+    - "FPT.VN"
+```
+
+### Documentation
+
+For detailed retraining documentation, see:
+- **[docs/RETRAINING_GUIDE.md](docs/RETRAINING_GUIDE.md)** - Complete retraining guide (Vietnamese & English)
 
 ## Quick Start
 
