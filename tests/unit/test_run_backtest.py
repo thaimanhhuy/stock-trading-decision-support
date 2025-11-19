@@ -84,22 +84,19 @@ class TestBacktestRunner:
         assert runner.slippage == 0.001
 
     @patch("os.path.exists")
-    @patch("src.backtesting.run_backtest.ARIMAModel")
     @patch("src.backtesting.run_backtest.LSTMModel")
     @patch("src.backtesting.run_backtest.GRUModel")
     def test_load_models_success(
-        self, mock_gru_class, mock_lstm_class, mock_arima_class, mock_exists, backtest_runner
+        self, mock_gru_class, mock_lstm_class, mock_exists, backtest_runner
     ):
         """Test successful model loading."""
         # Mock file existence
         mock_exists.return_value = True
 
         # Mock model instances
-        mock_arima = Mock()
         mock_lstm = Mock()
         mock_gru = Mock()
 
-        mock_arima_class.return_value = mock_arima
         mock_lstm_class.return_value = mock_lstm
         mock_gru_class.return_value = mock_gru
 
@@ -107,10 +104,9 @@ class TestBacktestRunner:
         models = backtest_runner.load_models()
 
         # Verify models loaded
-        assert "arima" in models
         assert "lstm" in models
         assert "gru" in models
-        assert len(models) == 3
+        assert len(models) == 2
 
     @patch("os.path.exists")
     def test_load_models_no_models_found(self, mock_exists, backtest_runner):

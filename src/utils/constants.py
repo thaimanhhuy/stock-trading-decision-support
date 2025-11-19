@@ -15,7 +15,7 @@ MIN_DATA_POINTS = 100
 DEFAULT_SEQUENCE_LENGTH = 60
 
 # Model constants
-MODEL_TYPES = ["arima", "lstm", "gru"]
+MODEL_TYPES = ["lstm", "gru"]
 RANDOM_SEED = 42
 
 # Signal constants

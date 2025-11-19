@@ -64,8 +64,6 @@ Status: To be implemented
 Coverage Target: >80%
 
 Tests to include:
-- test_arima_training()
-- test_arima_prediction()
 - test_lstm_training()
 - test_lstm_prediction()
 - test_gru_training()
@@ -197,7 +195,6 @@ src/config/settings.py                         45      5    89%
 src/data_ingestion/yahoo_fetcher.py            78      8    90%
 src/data_ingestion/data_validator.py           56      4    93%
 src/preprocessing/technical_indicators.py     120     12    90%
-src/models/arima_model.py                      95     15    84%
 src/models/lstm_model.py                      145     25    83%
 src/models/gru_model.py                       140     23    84%
 src/trading_engine/signal_generator.py         88      8    91%

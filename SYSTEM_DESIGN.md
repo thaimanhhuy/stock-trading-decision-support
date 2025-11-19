@@ -20,9 +20,9 @@ The Stock Trading Decision Support System follows a modular, layered architectur
                      │
 ┌────────────────────┴────────────────────────────────────┐
 │                   Model Layer                           │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌──────────────┐ │
-│  │ ARIMA  │  │  LSTM  │  │  GRU   │  │   Ensemble   │ │
-│  └────────┘  └────────┘  └────────┘  └──────────────┘ │
+│  ┌────────┐  ┌────────┐  ┌──────────────┐             │
+│  │  LSTM  │  │  GRU   │  │   Ensemble   │             │
+│  └────────┘  └────────┘  └──────────────┘             │
 └────────────────────┬────────────────────────────────────┘
                      │
 ┌────────────────────┴────────────────────────────────────┐
@@ -84,11 +84,6 @@ The Stock Trading Decision Support System follows a modular, layered architectur
 - Abstract base class
 - Common interface for all models
 - Standard methods: train(), predict(), evaluate(), save(), load()
-
-**ARIMA** (`arima_model.py`):
-- Statistical time series model
-- Auto-selection of (p,d,q) parameters using AIC
-- Handles non-stationarity via differencing
 
 **LSTM** (`lstm_model.py`):
 ```python

@@ -169,9 +169,6 @@ python scripts/train_models.py --symbol AAPL --models lstm
 
 # Train LSTM and GRU
 python scripts/train_models.py --symbol AAPL --models lstm,gru
-
-# Train ARIMA only
-python scripts/train_models.py --symbol AAPL --models arima
 ```
 
 ### Advanced Training Options
@@ -206,9 +203,6 @@ lstm_model = trainer.train_lstm(
 
 # Train GRU
 gru_model = trainer.train_gru()
-
-# Train ARIMA
-arima_model = trainer.train_arima()
 
 # Save models
 trainer.save_models()
@@ -248,10 +242,9 @@ print(f"Direction: {prediction['direction']}")
   'symbol': 'AAPL',
   'current_price': 150.25,
   'predictions': {
-    'arima': {'price': 151.50, 'change': 0.83},
     'lstm': {'price': 152.00, 'change': 1.17},
     'gru': {'price': 151.75, 'change': 1.00},
-    'ensemble': {'price': 151.75, 'change': 1.00}
+    'ensemble': {'price': 151.88, 'change': 1.09}
   },
   'confidence': {
     'lower': 149.50,
@@ -287,7 +280,7 @@ python scripts/run_backtest.py \
   --symbol AAPL \
   --start 2023-01-01 \
   --end 2024-01-01 \
-  --models lstm,gru,arima,ensemble
+  --models lstm,gru,ensemble
 
 # Generate detailed report
 python scripts/run_backtest.py \

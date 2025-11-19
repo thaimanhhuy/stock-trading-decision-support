@@ -49,9 +49,7 @@ def main():
             model_names = [m.strip() for m in args.models.split(",")]
             models = {}
             for name in model_names:
-                if name == "arima":
-                    models[name] = trainer.train_arima(X_train, y_train)
-                elif name == "lstm":
+                if name == "lstm":
                     models[name] = trainer.train_lstm(X_train, y_train)
                 elif name == "gru":
                     models[name] = trainer.train_gru(X_train, y_train)

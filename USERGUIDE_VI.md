@@ -179,20 +179,12 @@ python scripts/train_models.py \
   --epochs 50
 ```
 
-#### ARIMA Model
-
-```bash
-python scripts/train_models.py \
-  --symbol AAPL \
-  --models arima
-```
-
 ### Huấn Luyện Tất Cả Các Mô Hình
 
 ```bash
 python scripts/train_models.py \
   --symbol AAPL \
-  --models lstm,gru,arima
+  --models lstm,gru
 ```
 
 ### Huấn Luyện Cho Cổ Phiếu Việt Nam
@@ -209,7 +201,7 @@ python scripts/train_models.py \
 | Tham số | Mô tả | Mặc định |
 |---------|-------|----------|
 | `--symbol` | Mã cổ phiếu | Bắt buộc |
-| `--models` | Mô hình cần huấn luyện | lstm,gru,arima |
+| `--models` | Mô hình cần huấn luyện | lstm,gru |
 | `--epochs` | Số epochs (LSTM/GRU) | 50 |
 | `--batch-size` | Batch size | 64 |
 | `--learning-rate` | Learning rate | 0.001 |

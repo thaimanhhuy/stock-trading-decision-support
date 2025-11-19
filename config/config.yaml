@@ -170,7 +170,6 @@ models:
 
   # Model selection
   enabled_models:
-    - arima
     - lstm
     - gru
 
@@ -187,9 +186,8 @@ ensemble:
   enabled: true
   method: "weighted_average"  # weighted_average, voting, stacking
   weights:
-    arima: 0.33
-    lstm: 0.34
-    gru: 0.33
+    lstm: 0.50
+    gru: 0.50
   dynamic_weighting: false  # Adjust weights based on recent performance
   weighting_window: 30  # days for performance calculation
 

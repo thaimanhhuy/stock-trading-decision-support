@@ -102,7 +102,7 @@ Get stock price prediction for a single symbol.
 |-----------|------|----------|----------|-------------|
 | `symbol` | string | path | Yes | Stock ticker symbol (e.g., AAPL, VCB.VN) |
 | `days_ahead` | integer | query | No | Number of days to predict (default: 1, max: 30) |
-| `model` | string | query | No | Model to use: "arima", "lstm", "gru", "ensemble" (default: "ensemble") |
+| `model` | string | query | No | Model to use: "lstm", "gru", "ensemble" (default: "ensemble") |
 
 **Example Request:**
 ```bash
@@ -406,7 +406,7 @@ Get model performance metrics.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `model` | string | No | Specific model ("arima", "lstm", "gru", "ensemble") |
+| `model` | string | No | Specific model ("lstm", "gru", "ensemble") |
 | `period` | string | No | Time period: "1d", "7d", "30d", "90d" (default: "30d") |
 
 **Example Request:**

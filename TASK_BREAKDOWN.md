@@ -47,15 +47,7 @@ Feature engineering and preprocessing
 ### Phase 3: Model Development (Weeks 5-7)
 Implementation of prediction models
 
-#### 3.1: ARIMA Model (Week 5)
-- [ ] ARIMA implementation
-- [ ] Auto parameter selection (p, d, q)
-- [ ] Stationarity tests
-- [ ] Model diagnostics
-- [ ] Save/load functionality
-- [ ] Unit tests
-
-#### 3.2: LSTM Model (Week 6)
+#### 3.1: LSTM Model (Week 5)
 - [ ] LSTM architecture design
 - [ ] Data generator for sequences
 - [ ] Training loop with validation
@@ -64,14 +56,14 @@ Implementation of prediction models
 - [ ] Model evaluation
 - [ ] Unit tests
 
-#### 3.3: GRU Model (Week 6-7)
+#### 3.2: GRU Model (Week 6)
 - [ ] GRU architecture design
 - [ ] Training implementation
 - [ ] Comparison with LSTM
 - [ ] Optimization
 - [ ] Unit tests
 
-#### 3.4: Ensemble Method (Week 7)
+#### 3.3: Ensemble Method (Week 7)
 - [ ] Ensemble prediction logic
 - [ ] Weighting strategies
 - [ ] Confidence intervals
@@ -79,7 +71,7 @@ Implementation of prediction models
 - [ ] Integration tests
 
 **Deliverables**:
-- Three working models (ARIMA, LSTM, GRU)
+- Two working models (LSTM, GRU)
 - Ensemble prediction system
 - Model training scripts
 - Model evaluation metrics
@@ -269,7 +261,7 @@ Production-ready deployment
 - ✓ Data validation in place
 
 ### M2: Models Trained (End of Week 7)
-- [ ] All three models implemented
+- [ ] Both models implemented
 - [ ] Ensemble working
 - [ ] Model evaluation complete
 

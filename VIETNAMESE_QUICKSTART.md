@@ -20,7 +20,7 @@
 
 Hệ thống này giúp bạn:
 - ✅ Tải và phân tích dữ liệu cổ phiếu Việt Nam từ Yahoo Finance
-- ✅ Huấn luyện mô hình AI (LSTM, GRU, ARIMA) để dự đoán giá
+- ✅ Huấn luyện mô hình AI (LSTM, GRU) để dự đoán giá
 - ✅ Tạo tín hiệu giao dịch (Mua/Bán/Giữ)
 - ✅ Kiểm tra hiệu suất chiến lược (Backtesting)
 - ✅ Theo dõi danh mục đầu tư
@@ -211,7 +211,7 @@ HCM.VN  - Chứng khoán TPHCM
 python scripts/download_historical_data.py --symbols VCB.VN --period 5y
 
 # Bước 2: Huấn luyện mô hình
-python scripts/train_models.py --symbol VCB.VN --models lstm,gru,arima
+python scripts/train_models.py --symbol VCB.VN --models lstm,gru
 
 # Bước 3: Chạy backtest
 python scripts/run_backtest.py --symbol VCB.VN --start 2023-01-01 --end 2024-01-01

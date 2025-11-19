@@ -51,26 +51,7 @@ This document outlines key assumptions, constraints, and limitations of the Stoc
 
 ## Model Assumptions
 
-### 1. ARIMA Model
-
-**Key Assumptions**:
-- Data can be made stationary through differencing
-- Linear relationships between observations
-- Residuals are white noise
-- No structural breaks in time series
-
-**Limitations**:
-- Cannot capture non-linear patterns
-- Struggles with multiple seasonalities
-- Sensitive to outliers
-- Assumes constant variance (can be relaxed with GARCH)
-
-**Best For**:
-- Short-term predictions (1-5 days)
-- Relatively stable stocks
-- Linear trend continuation
-
-### 2. LSTM (Long Short-Term Memory)
+### 1. LSTM (Long Short-Term Memory)
 
 **Key Assumptions**:
 - Historical patterns repeat
@@ -90,7 +71,7 @@ This document outlines key assumptions, constraints, and limitations of the Stoc
 - Complex pattern recognition
 - Non-linear relationships
 
-### 3. GRU (Gated Recurrent Unit)
+### 2. GRU (Gated Recurrent Unit)
 
 **Key Assumptions**:
 - Similar to LSTM but with simpler architecture
@@ -108,11 +89,11 @@ This document outlines key assumptions, constraints, and limitations of the Stoc
 - When computational resources are limited
 - Similar use cases to LSTM
 
-### 4. Ensemble Approach
+### 3. Ensemble Approach
 
 **Assumption**: Combining multiple models reduces individual model weaknesses
 
-**Method**: Weighted average or voting of ARIMA, LSTM, GRU predictions
+**Method**: Weighted average of LSTM and GRU predictions (0.50, 0.50)
 
 **Limitations**:
 - All models may fail simultaneously in extreme conditions
@@ -382,7 +363,6 @@ This document outlines key assumptions, constraints, and limitations of the Stoc
 **Assumption**: Models need periodic retraining
 
 **Typical Timeline**:
-- ARIMA: Weekly to monthly
 - LSTM/GRU: Monthly to quarterly
 - Technical indicators: Parameters adjusted quarterly
 

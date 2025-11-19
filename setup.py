@@ -62,7 +62,7 @@ setup(
         'src': ['config/*.yaml'],
     },
     zip_safe=False,
-    keywords='stock trading machine-learning lstm arima prediction finance',
+    keywords='stock trading machine-learning lstm gru prediction finance',
     project_urls={
         'Bug Reports': 'https://github.com/yourusername/stock-trading-decision-support/issues',
         'Source': 'https://github.com/yourusername/stock-trading-decision-support',

@@ -204,7 +204,6 @@ To verify these changes work correctly:
 5. **Compare results** with thesis Table 4.1:
    - GRU model should achieve MAPE ≈ 1.5-2.0%
    - LSTM model should achieve MAPE ≈ 2.0-2.5%
-   - ARIMA baseline should achieve MAPE ≈ 3.0-4.0%
 
 ---
 

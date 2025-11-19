@@ -67,12 +67,6 @@ This system is **NOT**:
 
 ## Limitations of Machine Learning Models
 
-### ARIMA Model
-- Assumes linear relationships
-- Sensitive to non-stationary data
-- May not capture complex patterns
-- Requires careful parameter selection
-
 ### LSTM/GRU Models
 - Require large amounts of training data
 - Can overfit to historical patterns
