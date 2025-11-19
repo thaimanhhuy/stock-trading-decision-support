@@ -178,9 +178,30 @@ models:
   model_versioning: true
 
   # Retraining
-  auto_retrain: false
-  retrain_frequency: "monthly"  # daily, weekly, monthly
+  auto_retrain: true
+  retrain_frequency: "quarterly"  # daily, weekly, monthly, quarterly
+  retrain_interval_months: 3  # For quarterly retraining
   retrain_threshold: 0.15  # Retrain if performance drops 15%
+
+  # Market event-based retraining
+  market_event_retraining:
+    enabled: true
+    check_interval_hours: 24  # Check for market events every 24 hours
+    drop_threshold_percentage: 5.0  # Trigger retraining if market drops >5%
+    lookback_days: 5  # Look at market changes over last 5 days
+
+  # Symbols to monitor for automatic retraining
+  monitored_symbols:
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+    - "AMZN"
+    - "TSLA"
+    - "VCB.VN"
+    - "FPT.VN"
+    - "VHM.VN"
+    - "HPG.VN"
+    - "VNM.VN"
 
 ensemble:
   enabled: true
