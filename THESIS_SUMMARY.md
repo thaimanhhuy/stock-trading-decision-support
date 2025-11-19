@@ -41,12 +41,6 @@ Technical indicators calculated:
 
 ### 3. Model Development
 
-#### ARIMA (AutoRegressive Integrated Moving Average)
-- **Type**: Statistical time series model
-- **Strengths**: Interpretable, works with limited data
-- **Use case**: Baseline model, short-term predictions
-- **Parameters**: Automatically selected using AIC/BIC criteria
-
 #### LSTM (Long Short-Term Memory)
 - **Type**: Deep learning RNN architecture
 - **Strengths**: Captures long-term dependencies, handles sequences
@@ -61,9 +55,9 @@ Technical indicators calculated:
 - **Comparison**: Similar performance to LSTM with lower computational cost
 
 ### 4. Ensemble Method
-- Combine predictions from multiple models
+- Combine predictions from LSTM and GRU models
 - Weighting strategies:
-  - Equal weighting
+  - Equal weighting (0.50, 0.50)
   - Performance-based weighting
   - Volatility-adjusted weighting
 - Dynamic weight adjustment based on recent performance
@@ -96,7 +90,6 @@ Risk management:
 ### Model Performance
 
 #### Prediction Accuracy
-- **ARIMA**: 52-54% directional accuracy, best for short-term (1-3 days)
 - **LSTM**: 54-57% directional accuracy, captures complex patterns
 - **GRU**: 53-56% directional accuracy, faster training than LSTM
 - **Ensemble**: 55-58% directional accuracy, most consistent
@@ -140,7 +133,7 @@ Risk management:
 ### Components
 1. **Data Pipeline**: Ingestion, validation, storage
 2. **Feature Engineering**: Technical indicators, transformations
-3. **Model Training**: ARIMA, LSTM, GRU implementations
+3. **Model Training**: LSTM, GRU implementations
 4. **Prediction Service**: Real-time and batch predictions
 5. **Trading Engine**: Signal generation, risk management
 6. **Backtesting**: Historical performance evaluation

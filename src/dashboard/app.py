@@ -109,7 +109,6 @@ elif page == "Monitoring":
 
     with col1:
         st.subheader("Model Status")
-        st.info("ARIMA: ✅ Healthy")
         st.info("LSTM: ✅ Healthy")
         st.info("GRU: ✅ Healthy")
 

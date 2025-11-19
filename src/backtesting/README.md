@@ -11,7 +11,7 @@ The backtesting system implements walk-forward validation to assess model perfor
 ### 1. `run_backtest.py` - Main Backtest Script
 
 Comprehensive backtest script that:
-- Loads trained models (ARIMA, LSTM, GRU)
+- Loads trained models (LSTM, GRU)
 - Runs walk-forward validation on historical data
 - Calculates performance metrics
 - Saves results to JSON format
@@ -94,7 +94,6 @@ runner.print_summary(results)
 Before running backtests, you must have:
 
 1. **Trained Models**: Models should be saved in `models/saved_models/` with naming convention:
-   - `{SYMBOL}_arima.pkl` - ARIMA model
    - `{SYMBOL}_lstm.h5` - LSTM model
    - `{SYMBOL}_gru.h5` - GRU model
 

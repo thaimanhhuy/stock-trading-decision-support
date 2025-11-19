@@ -184,22 +184,12 @@ gru:
     - mae
     - mse
 
-# ARIMA configuration
-arima:
-  max_p: 5
-  max_d: 2
-  max_q: 5
-  seasonal: false
-  m: 1
-  information_criterion: aic
-
 # Ensemble configuration
 ensemble:
   method: weighted_average
   weights:
-    arima: 0.33
-    lstm: 0.34
-    gru: 0.33
+    lstm: 0.50
+    gru: 0.50
   min_confidence: 0.5
 
 # Preprocessing

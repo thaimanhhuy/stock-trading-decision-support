@@ -1,33 +1,5 @@
 # Model-specific Configuration
 
-arima:
-  # Parameter selection
-  auto_select: true
-  use_aic: true  # Akaike Information Criterion
-  use_bic: true  # Bayesian Information Criterion
-
-  # Parameter ranges for auto-selection
-  max_p: 5  # Maximum autoregressive order
-  max_d: 2  # Maximum differencing order
-  max_q: 5  # Maximum moving average order
-
-  # Manual parameters (used if auto_select is false)
-  p: 1
-  d: 1
-  q: 1
-
-  # Seasonal ARIMA
-  seasonal: false
-  seasonal_order: [0, 0, 0, 0]  # (P, D, Q, s)
-
-  # Fitting
-  method: "lbfgs"  # lbfgs, bfgs, newton, nm, powell
-  maxiter: 50
-  trend: "c"  # c (constant), t (linear), ct (constant+linear), n (none)
-
-  # Prediction
-  confidence_level: 0.95
-
 lstm:
   # Architecture
   layers:

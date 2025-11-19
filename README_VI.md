@@ -2,12 +2,12 @@
 
 [English](README.md) | **Tiếng Việt**
 
-Hệ thống hỗ trợ quyết định giao dịch chứng khoán dựa trên học máy (Machine Learning), kết hợp các mô hình dự đoán chuỗi thời gian (ARIMA, LSTM, GRU) với phân tích kỹ thuật để tạo tín hiệu giao dịch.
+Hệ thống hỗ trợ quyết định giao dịch chứng khoán dựa trên học máy (Machine Learning), kết hợp các mô hình deep learning (LSTM, GRU) với phân tích kỹ thuật để tạo tín hiệu giao dịch.
 
 ## Tổng Quan
 
 Hệ thống cung cấp:
-- **Dự đoán đa mô hình**: Sử dụng ARIMA, LSTM, và GRU để dự báo giá cổ phiếu
+- **Dự đoán đa mô hình**: Sử dụng LSTM và GRU để dự báo giá cổ phiếu
 - **Chỉ báo kỹ thuật**: RSI, MACD, Bollinger Bands và nhiều chỉ báo khác
 - **Quản lý rủi ro**: Tính toán kích thước vị thế, cắt lỗ, và kiểm soát rủi ro danh mục
 - **Backtesting**: Đánh giá hiệu suất giao dịch trên dữ liệu lịch sử
@@ -100,10 +100,9 @@ Hệ thống bao gồm cấu hình đặc thù cho thị trường Việt Nam tr
 - Cập nhật dữ liệu tự động
 
 ### Mô Hình Machine Learning
-- **ARIMA**: Mô hình thống kê chuỗi thời gian
 - **LSTM**: Mô hình deep learning cho dữ liệu tuần tự
 - **GRU**: Mạng nơ-ron hồi quy hiệu quả
-- Dự đoán kết hợp từ nhiều mô hình (ensemble)
+- Dự đoán kết hợp từ cả hai mô hình (ensemble)
 
 ### Công Cụ Giao Dịch
 - Tạo tín hiệu giao dịch dựa trên dự đoán mô hình và chỉ báo kỹ thuật
@@ -160,7 +159,7 @@ python scripts/download_historical_data.py --symbols VCB.VN,FPT.VN,CTG.VN --peri
 
 ```bash
 # Huấn luyện tất cả các mô hình
-python scripts/train_models.py --symbol AAPL --models lstm,gru,arima
+python scripts/train_models.py --symbol AAPL --models lstm,gru
 
 # Huấn luyện mô hình cho cổ phiếu Việt Nam
 python scripts/train_models.py --symbol VCB.VN --models lstm,gru
@@ -408,7 +407,6 @@ Xem [ASSUMPTIONS.md](ASSUMPTIONS.md) để biết chi tiết đầy đủ.
 
 - **Python 3.8+**: Ngôn ngữ lập trình chính
 - **TensorFlow/Keras**: Mô hình deep learning
-- **statsmodels**: Triển khai ARIMA
 - **pandas/numpy**: Xử lý dữ liệu
 - **FastAPI**: Framework REST API
 - **Streamlit**: Framework dashboard
@@ -485,7 +483,7 @@ Dự án dựa trên nghiên cứu về machine learning cho dự đoán thị t
 ## Roadmap
 
 ### Phiên bản hiện tại (0.1.0)
-- ✅ Mô hình ARIMA, LSTM, GRU
+- ✅ Mô hình LSTM, GRU
 - ✅ Backtesting engine
 - ✅ REST API
 - ✅ Dashboard Streamlit

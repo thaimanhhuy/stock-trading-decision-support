@@ -3,7 +3,7 @@
 Backtest script for evaluating trained models.
 
 This script:
-1. Loads trained models (ARIMA, LSTM, GRU)
+1. Loads trained models (LSTM, GRU)
 2. Runs backtest on historical data using walk-forward validation
 3. Calculates performance metrics (annual return, max drawdown, Sharpe, win rate)
 4. Saves results to results/backtest_summary.json
@@ -30,7 +30,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from src.data_ingestion.yahoo_fetcher import YahooDataFetcher
 from src.preprocessing.data_processor import DataProcessor
-from src.models.arima_model import ARIMAModel
 from src.models.lstm_model import LSTMModel
 from src.models.gru_model import GRUModel
 from src.models.model_evaluator import ModelEvaluator
@@ -105,19 +104,8 @@ class BacktestRunner(LoggerMixin):
 
         # Model file paths
         model_dir = self.settings.model_saved_path
-        arima_path = os.path.join(model_dir, f"{self.symbol}_arima.pkl")
         lstm_path = os.path.join(model_dir, f"{self.symbol}_lstm.h5")
         gru_path = os.path.join(model_dir, f"{self.symbol}_gru.h5")
-
-        # Load ARIMA model
-        if os.path.exists(arima_path):
-            try:
-                arima_model = ARIMAModel(self.symbol)
-                arima_model.load(arima_path)
-                models["arima"] = arima_model
-                self.logger.info(f"Loaded ARIMA model from {arima_path}")
-            except Exception as e:
-                self.logger.warning(f"Failed to load ARIMA model: {e}")
 
         # Load LSTM model
         if os.path.exists(lstm_path):

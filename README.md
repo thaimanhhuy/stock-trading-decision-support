@@ -1,11 +1,11 @@
 # Stock Trading Decision Support System
 
-A comprehensive machine learning-based stock trading decision support system that combines time series forecasting models (ARIMA, LSTM, GRU) with technical analysis for generating trading signals.
+A comprehensive machine learning-based stock trading decision support system that combines deep learning models (LSTM, GRU) with technical analysis for generating trading signals.
 
 ## Overview
 
 This system provides:
-- **Multi-model predictions**: ARIMA, LSTM, and GRU models for stock price forecasting
+- **Multi-model predictions**: LSTM and GRU models for stock price forecasting
 - **Technical indicators**: RSI, MACD, Bollinger Bands, and more
 - **Risk management**: Position sizing, stop-loss, and portfolio risk controls
 - **Backtesting engine**: Historical performance evaluation
@@ -21,10 +21,9 @@ This system provides:
 - Automated data updates
 
 ### Machine Learning Models
-- **ARIMA**: Statistical time series model
 - **LSTM**: Deep learning model for sequential data
 - **GRU**: Efficient recurrent neural network
-- Ensemble prediction combining multiple models
+- Ensemble prediction combining both models
 
 ### Trading Engine
 - Signal generation based on model predictions and technical indicators
@@ -158,7 +157,7 @@ python scripts/download_historical_data.py --symbols AAPL,MSFT,GOOGL --start 202
 ### Train Models
 
 ```bash
-python scripts/train_models.py --symbol AAPL --models lstm,gru,arima
+python scripts/train_models.py --symbol AAPL --models lstm,gru
 ```
 
 ### Run Backtesting
@@ -278,7 +277,6 @@ See [RISK_DISCLOSURE.md](RISK_DISCLOSURE.md) for detailed risk information.
 
 - **Python 3.8+**: Core language
 - **TensorFlow/Keras**: Deep learning models
-- **statsmodels**: ARIMA implementation
 - **pandas/numpy**: Data manipulation
 - **FastAPI**: REST API framework
 - **Streamlit**: Dashboard framework
