@@ -1,16 +1,82 @@
-FROM python:3.10-slim
+# Multi-stage build for Stock Trading Decision Support Dashboard
+# This Dockerfile creates an optimized image for the Streamlit dashboard
+
+# ============= Stage 1: Builder =============
+FROM python:3.10-slim as builder
 
 WORKDIR /app
 
-# Install dependencies
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application
-COPY . .
+# Create virtual environment and install dependencies
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Expose port
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
+
+# ============= Stage 2: Runtime =============
+FROM python:3.10-slim
+
+# Set metadata
+LABEL maintainer="your-email@example.com"
+LABEL description="Stock Trading Decision Support Dashboard (Streamlit)"
+LABEL version="1.0.0"
+
+WORKDIR /app
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Set environment variables
+ENV PATH="/opt/venv/bin:$PATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_ENV=production \
+    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Create necessary directories and set permissions
+RUN mkdir -p /app/data /app/models /app/logs /app/config /home/appuser/.streamlit && \
+    chown -R appuser:appuser /app /home/appuser
+
+# Copy application code
+COPY --chown=appuser:appuser src ./src
+COPY --chown=appuser:appuser scripts ./scripts
+COPY --chown=appuser:appuser config ./config
+COPY --chown=appuser:appuser setup.py .
+COPY --chown=appuser:appuser .env.example .env
+
+# Install the package
+RUN pip install -e .
+
+# Create Streamlit config
+RUN echo '[server]\nheadless = true\nport = 8501\naddress = "0.0.0.0"\n\n[browser]\ngatherUsageStats = false\n\n[theme]\nbase = "light"' > /home/appuser/.streamlit/config.toml && \
+    chown appuser:appuser /home/appuser/.streamlit/config.toml
+
+# Switch to non-root user
+USER appuser
+
+# Expose dashboard port
 EXPOSE 8501
 
-# Run dashboard
-CMD ["streamlit", "run", "src/dashboard/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+# Run the dashboard
+CMD ["streamlit", "run", "src/dashboard/app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
