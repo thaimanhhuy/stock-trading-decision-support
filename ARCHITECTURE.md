@@ -160,29 +160,76 @@
 │                       API & SERVICE LAYER                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                                │
-│  FastAPI Application (src/api/main.py)                                       │
+│  FastAPI Application (src/api/)                                              │
+│  Modular route structure with 4 specialized modules:                        │
 │                                                                                │
-│  ┌─ GET / ──────────────────────────────────────────┐                       │
-│  │ Response: API status                             │                       │
-│  └────────────────────────────────────────────────────┘                      │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ main.py - Application Entry Point                                      │ │
+│  │ • Initializes FastAPI app                                              │ │
+│  │ • Includes route modules                                                │ │
+│  │ • Lifecycle management (startup/shutdown)                              │ │
+│  │ • Scheduler initialization                                              │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                │
-│  ┌─ GET /health ────────────────────────────────────┐                       │
-│  │ Response: {"status": "healthy"}                  │                       │
-│  └────────────────────────────────────────────────────┘                      │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ routes/predictions.py - Prediction & Signal Routes                     │ │
+│  │ ┌─ GET /api/v1/predictions/{symbol} ────────────────────────────┐     │ │
+│  │ │ Response: {symbol, current_price, predicted_price,             │     │ │
+│  │ │            confidence, timestamp}                              │     │ │
+│  │ └──────────────────────────────────────────────────────────────┘      │ │
+│  │ ┌─ GET /api/v1/signals/{symbol} ────────────────────────────────┐     │ │
+│  │ │ Response: {symbol, signal, strength, target_price,             │     │ │
+│  │ │            stop_loss, take_profit}                             │     │ │
+│  │ └──────────────────────────────────────────────────────────────┘      │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                │
-│  ┌─ GET /api/v1/predictions/{symbol} ───────────────────────┐               │
-│  │ Response: {symbol, current_price,                         │               │
-│  │            predicted_price, confidence, timestamp}        │               │
-│  └──────────────────────────────────────────────────────────┘                │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ routes/training.py - Model Training Routes                             │ │
+│  │ ┌─ POST /api/v1/training/train ──────────────────────────────┐        │ │
+│  │ │ Request: {symbol, models, fetch_new_data}                   │        │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ POST /api/v1/training/batch-train ────────────────────────┐        │ │
+│  │ │ Request: {symbols[], models, fetch_new_data}                │        │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ GET /api/v1/training/history/{symbol} ────────────────────┐        │ │
+│  │ │ Response: Training history records                          │        │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ GET /api/v1/training/stats ────────────────────────────────┐       │ │
+│  │ │ Response: Training statistics and metrics                   │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                │
-│  ┌─ GET /api/v1/signals/{symbol} ───────────────────────────┐               │
-│  │ Response: {symbol, signal, strength,                       │               │
-│  │            target_price, stop_loss, take_profit}          │               │
-│  └──────────────────────────────────────────────────────────┘                │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ routes/monitoring.py - Monitoring & Market Routes                      │ │
+│  │ ┌─ GET /api/v1/monitoring/health ────────────────────────────┐        │ │
+│  │ │ Response: {status, models_loaded, data_updated}             │        │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ GET /api/v1/market/check/{market} ────────────────────────┐        │ │
+│  │ │ Response: {event_detected, drop_percentage, should_retrain} │        │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ GET /api/v1/market/events ─────────────────────────────────┐       │ │
+│  │ │ Response: Market event history                               │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                │
-│  ┌─ GET /api/v1/monitoring/health ───────────────────────────┐              │
-│  │ Response: {status, models_loaded, data_updated}           │              │
-│  └──────────────────────────────────────────────────────────┘               │
+│  ┌────────────────────────────────────────────────────────────────────────┐ │
+│  │ routes/scheduler.py - Scheduler Control Routes                         │ │
+│  │ ┌─ GET /api/v1/scheduler/status ──────────────────────────────┐       │ │
+│  │ │ Response: {running, jobs[], next_run_time}                   │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ POST /api/v1/scheduler/start ──────────────────────────────┐       │ │
+│  │ │ Response: {status: "success"}                                │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ POST /api/v1/scheduler/stop ───────────────────────────────┐       │ │
+│  │ │ Response: {status: "success"}                                │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ POST /api/v1/scheduler/trigger-retraining ─────────────────┐       │ │
+│  │ │ Response: {status: "success"}                                │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  │ ┌─ POST /api/v1/scheduler/trigger-market-check ───────────────┐       │ │
+│  │ │ Response: {status: "success"}                                │       │ │
+│  │ └──────────────────────────────────────────────────────────┘          │ │
+│  └────────────────────────────────────────────────────────────────────────┘ │
 │                                                                                │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                    MONITORING & UTILITIES LAYER                               │

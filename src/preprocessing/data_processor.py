@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from typing import Tuple
 import joblib
 import os
 from src.preprocessing.technical_indicators import TechnicalIndicators
@@ -13,7 +14,7 @@ from src.config.settings import get_settings
 class DataProcessor(LoggerMixin):
     """Process and engineer features from raw data."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize data processor."""
         self.indicators = TechnicalIndicators()
         # Use MinMaxScaler to normalize to [0,1] range as per thesis requirement
@@ -79,7 +80,7 @@ class DataProcessor(LoggerMixin):
 
     def create_sequences(
         self, data: np.ndarray, sequence_length: int = 60, target_column_idx: int = 0
-    ) -> tuple:
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """Create sliding window sequences for LSTM/GRU models.
 
         Args:

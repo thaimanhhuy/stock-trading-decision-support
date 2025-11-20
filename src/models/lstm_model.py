@@ -17,18 +17,19 @@ except ImportError:
 class LSTMModel(BaseModel):
     """LSTM model for stock price prediction.
 
-    Architecture from thesis:
-    - Input: (batch_size, 60, 4) - 60 days lookback, 4 features
-    - LSTM layer: 128 units
-    - Dropout: 0.2
+    Architecture (matches model_config.yaml):
+    - Input: (batch_size, 60, n_features) - 60 days lookback
+    - LSTM layer 1: 128 units, return_sequences=True, dropout=0.2
+    - LSTM layer 2: 64 units, return_sequences=True, dropout=0.2
+    - LSTM layer 3: 32 units, return_sequences=False, dropout=0.2
     - Dense output: 1 unit (next day close price)
 
-    Training config from thesis:
+    Training config:
     - Optimizer: Adam (lr=0.001)
     - Loss: MSE
-    - Batch size: 64
-    - Max epochs: 50
-    - Early stopping: patience=8
+    - Batch size: 32 (from config)
+    - Max epochs: 100 (from config)
+    - Early stopping: patience=15 (from config)
     - Random seed: 42
     """
 
@@ -58,7 +59,10 @@ class LSTMModel(BaseModel):
             self._build_model()
 
     def _build_model(self) -> None:
-        """Build LSTM model architecture."""
+        """Build LSTM model architecture.
+
+        Architecture: 3-layer LSTM (128→64→32) matching model_config.yaml
+        """
         if not TENSORFLOW_AVAILABLE:
             return
 
@@ -66,17 +70,20 @@ class LSTMModel(BaseModel):
             # Input layer
             layers.Input(shape=(self.sequence_length, self.n_features)),
 
-            # LSTM layer with 128 units (from thesis)
-            layers.LSTM(128, return_sequences=False),
+            # First LSTM layer: 128 units (matches config)
+            layers.LSTM(128, return_sequences=True, dropout=0.2),
 
-            # Dropout layer (0.2 from thesis)
-            layers.Dropout(0.2),
+            # Second LSTM layer: 64 units (matches config)
+            layers.LSTM(64, return_sequences=True, dropout=0.2),
+
+            # Third LSTM layer: 32 units (matches config)
+            layers.LSTM(32, return_sequences=False, dropout=0.2),
 
             # Dense output layer (1 unit for next day close price)
             layers.Dense(1)
         ])
 
-        # Compile with Adam optimizer (lr=0.001) and MSE loss (from thesis)
+        # Compile with Adam optimizer (lr=0.001) and MSE loss (from config)
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
             loss='mse',
@@ -92,9 +99,9 @@ class LSTMModel(BaseModel):
         y_train: np.ndarray,
         X_val: Optional[np.ndarray] = None,
         y_val: Optional[np.ndarray] = None,
-        batch_size: int = 64,
-        epochs: int = 50,
-        patience: int = 8,
+        batch_size: int = 32,
+        epochs: int = 100,
+        patience: int = 15,
         **kwargs
     ) -> None:
         """Train LSTM model.
@@ -104,9 +111,9 @@ class LSTMModel(BaseModel):
             y_train: Training targets (n_samples,)
             X_val: Validation sequences (optional)
             y_val: Validation targets (optional)
-            batch_size: Batch size (default 64 from thesis)
-            epochs: Max epochs (default 50 from thesis)
-            patience: Early stopping patience (default 8 from thesis)
+            batch_size: Batch size (default 32 from config)
+            epochs: Max epochs (default 100 from config)
+            patience: Early stopping patience (default 15 from config)
             **kwargs: Additional arguments
         """
         if not TENSORFLOW_AVAILABLE:
