@@ -65,3 +65,9 @@ class BacktestError(TradingSystemError):
     """Raised when backtesting encounters an error."""
 
     pass
+
+
+class PortfolioError(TradingSystemError):
+    """Raised when portfolio operations fail."""
+
+    pass
