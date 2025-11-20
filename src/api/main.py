@@ -7,7 +7,7 @@ from src.config.settings import get_settings
 from src.services.scheduler_service import SchedulerService
 
 # Import route modules
-from src.api.routes import predictions, training, monitoring, scheduler
+from src.api.routes import predictions, training, monitoring, scheduler, portfolio
 
 # Setup
 setup_logging()
@@ -38,6 +38,7 @@ app.include_router(predictions.router)
 app.include_router(training.router)
 app.include_router(monitoring.router)
 app.include_router(scheduler.router)
+app.include_router(portfolio.router)
 
 
 # Basic routes

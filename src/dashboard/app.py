@@ -109,6 +109,73 @@ def get_multiple_signals(symbols: list) -> pd.DataFrame:
     return pd.DataFrame(signals_data) if signals_data else pd.DataFrame()
 
 
+def get_portfolio_summary() -> Optional[Dict[str, Any]]:
+    """Get portfolio summary from API.
+
+    Returns:
+        Dict with portfolio summary or None if failed
+    """
+    try:
+        response = requests.get(
+            f"{API_BASE_URL}/api/v1/portfolio/summary",
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"❌ Failed to fetch portfolio summary: {str(e)}")
+        return None
+    except Exception as e:
+        st.error(f"❌ Unexpected error: {str(e)}")
+        return None
+
+
+def get_portfolio_positions() -> pd.DataFrame:
+    """Get portfolio positions from API.
+
+    Returns:
+        DataFrame with positions
+    """
+    try:
+        response = requests.get(
+            f"{API_BASE_URL}/api/v1/portfolio/positions",
+            timeout=10
+        )
+        response.raise_for_status()
+        positions = response.json()
+
+        if positions:
+            return pd.DataFrame(positions)
+        return pd.DataFrame()
+    except requests.exceptions.RequestException as e:
+        st.error(f"❌ Failed to fetch positions: {str(e)}")
+        return pd.DataFrame()
+    except Exception as e:
+        st.error(f"❌ Unexpected error: {str(e)}")
+        return pd.DataFrame()
+
+
+def get_performance_metrics() -> Optional[Dict[str, Any]]:
+    """Get performance metrics from API.
+
+    Returns:
+        Dict with performance metrics or None if failed
+    """
+    try:
+        response = requests.get(
+            f"{API_BASE_URL}/api/v1/portfolio/performance",
+            timeout=10
+        )
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        st.error(f"❌ Failed to fetch performance metrics: {str(e)}")
+        return None
+    except Exception as e:
+        st.error(f"❌ Unexpected error: {str(e)}")
+        return None
+
+
 # ========== Initialize Session State ==========
 
 if "api_health" not in st.session_state:
@@ -155,19 +222,50 @@ if page == "Home":
         "powered by LSTM and GRU machine learning models."
     )
 
-    col1, col2, col3 = st.columns(3)
+    # Fetch portfolio summary
+    if st.session_state.api_health:
+        with st.spinner("Fetching portfolio summary..."):
+            portfolio_summary = get_portfolio_summary()
 
-    with col1:
-        st.metric("Portfolio Value", "$100,000", "+5.2%")
-        st.caption("⚠️ Demo value - Not connected to live portfolio")
+            if portfolio_summary:
+                col1, col2, col3 = st.columns(3)
 
-    with col2:
-        st.metric("Total Return", "15.6%", "+2.1%")
-        st.caption("⚠️ Demo value")
+                with col1:
+                    total_value = portfolio_summary.get("total_value", 0)
+                    total_return_pct = portfolio_summary.get("total_return_percent", 0)
+                    st.metric(
+                        "Portfolio Value",
+                        f"${total_value:,.2f}",
+                        f"{total_return_pct:+.2f}%"
+                    )
 
-    with col3:
-        st.metric("Active Positions", "5", "+1")
-        st.caption("⚠️ Demo value")
+                with col2:
+                    total_return = portfolio_summary.get("total_return", 0)
+                    st.metric(
+                        "Total Return",
+                        f"${total_return:,.2f}",
+                        f"{total_return_pct:+.2f}%"
+                    )
+
+                with col3:
+                    positions_count = portfolio_summary.get("positions_count", 0)
+                    st.metric("Active Positions", positions_count)
+            else:
+                st.warning("⚠️ Unable to fetch portfolio summary")
+    else:
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.metric("Portfolio Value", "$0.00", "0.0%")
+            st.caption("⚠️ API not connected")
+
+        with col2:
+            st.metric("Total Return", "$0.00")
+            st.caption("⚠️ API not connected")
+
+        with col3:
+            st.metric("Active Positions", "0")
+            st.caption("⚠️ API not connected")
 
     st.subheader("Recent Signals")
 
@@ -338,50 +436,80 @@ elif page == "Signals":
 elif page == "Performance":
     st.header("Performance Metrics")
 
-    st.warning(
-        "⚠️ **Portfolio performance tracking is not yet implemented.** "
-        "The charts below show sample data for demonstration purposes."
-    )
+    if st.session_state.api_health:
+        with st.spinner("Fetching performance metrics..."):
+            portfolio_summary = get_portfolio_summary()
+            performance_metrics = get_performance_metrics()
 
-    # Sample data for demonstration
-    dates = pd.date_range(start="2024-01-01", periods=100, freq="D")
-    portfolio_values = pd.Series(
-        100000 * (1 + pd.Series(range(100)) * 0.001),
-        index=dates
-    )
+            if portfolio_summary and performance_metrics:
+                # Key metrics row
+                col1, col2, col3, col4 = st.columns(4)
 
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=dates,
-            y=portfolio_values,
-            mode="lines",
-            name="Portfolio Value",
-            line=dict(color="#1f77b4", width=2)
-        )
-    )
-    fig.update_layout(
-        title="Portfolio Value Over Time",
-        xaxis_title="Date",
-        yaxis_title="Value ($)",
-        hovermode="x unified"
-    )
+                with col1:
+                    total_return_pct = portfolio_summary.get("total_return_percent", 0)
+                    st.metric("Total Return", f"{total_return_pct:.2f}%")
 
-    st.plotly_chart(fig, use_container_width=True)
+                with col2:
+                    sharpe_ratio = performance_metrics.get("sharpe_ratio", 0)
+                    st.metric("Sharpe Ratio", f"{sharpe_ratio:.2f}")
 
-    col1, col2, col3 = st.columns(3)
+                with col3:
+                    max_drawdown = performance_metrics.get("max_drawdown", 0)
+                    st.metric("Max Drawdown", f"{max_drawdown:.2f}%")
 
-    with col1:
-        st.metric("Total Return", "15.6%")
-        st.caption("⚠️ Demo value")
+                with col4:
+                    win_rate = performance_metrics.get("win_rate", 0)
+                    st.metric("Win Rate", f"{win_rate:.1%}")
 
-    with col2:
-        st.metric("Sharpe Ratio", "1.23")
-        st.caption("⚠️ Demo value")
+                # Portfolio breakdown
+                st.subheader("Portfolio Breakdown")
+                col1, col2 = st.columns(2)
 
-    with col3:
-        st.metric("Max Drawdown", "-8.5%")
-        st.caption("⚠️ Demo value")
+                with col1:
+                    st.metric("Cash", f"${portfolio_summary.get('cash', 0):,.2f}")
+                    st.metric("Equity Value", f"${portfolio_summary.get('equity', 0):,.2f}")
+
+                with col2:
+                    st.metric("Total Value", f"${portfolio_summary.get('total_value', 0):,.2f}")
+                    st.metric("Unrealized P&L", f"${portfolio_summary.get('unrealized_pnl', 0):,.2f}")
+
+                # Positions table
+                st.subheader("Current Positions")
+                positions_df = get_portfolio_positions()
+
+                if not positions_df.empty:
+                    # Format numeric columns
+                    display_df = positions_df.copy()
+                    display_df['entry_price'] = display_df['entry_price'].apply(lambda x: f"${x:.2f}")
+                    display_df['current_price'] = display_df['current_price'].apply(lambda x: f"${x:.2f}")
+                    display_df['current_value'] = display_df['current_value'].apply(lambda x: f"${x:,.2f}")
+                    display_df['unrealized_pnl'] = display_df['unrealized_pnl'].apply(lambda x: f"${x:+,.2f}")
+                    display_df['unrealized_pnl_percent'] = display_df['unrealized_pnl_percent'].apply(lambda x: f"{x:+.2f}%")
+
+                    st.dataframe(display_df, use_container_width=True)
+                else:
+                    st.info("No active positions")
+
+                # Trading activity
+                st.subheader("Trading Activity")
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("Total Trades", portfolio_summary.get("total_trades", 0))
+
+                with col2:
+                    st.metric("Buy Trades", portfolio_summary.get("buy_trades", 0))
+
+                with col3:
+                    st.metric("Sell Trades", portfolio_summary.get("sell_trades", 0))
+
+                # Note about chart
+                st.info("📊 **Historical portfolio value chart** requires tracking daily snapshots and will be implemented in future updates.")
+
+            else:
+                st.warning("⚠️ Unable to fetch performance data")
+    else:
+        st.error("❌ API not connected. Cannot fetch performance metrics.")
 
 
 # ========== Monitoring Page ==========
@@ -413,23 +541,119 @@ elif page == "Monitoring":
             st.rerun()
 
     with col2:
-        st.subheader("Model Status")
-        st.info("LSTM: ✅ Loaded")
-        st.info("GRU: ✅ Loaded")
-        st.caption("⚠️ Model status monitoring not yet implemented")
+        st.subheader("Trained Models")
 
-    st.subheader("Data Status")
-    st.info("Last Update: 2024-01-15 10:30:00")
-    st.info("Data Quality: ✅ Good")
-    st.info("Drift Detected: ❌ No")
-    st.caption("⚠️ Real-time data monitoring not yet implemented")
+        if st.session_state.api_health:
+            try:
+                response = requests.get(f"{API_BASE_URL}/api/v1/monitoring/models", timeout=10)
+                if response.status_code == 200:
+                    models_data = response.json()
 
-    # System info
+                    if models_data.get("exists"):
+                        st.metric("Total Symbols", models_data.get("total_symbols", 0))
+                        st.metric("Total Model Files", models_data.get("total_files", 0))
+
+                        # Show symbols with models
+                        if models_data.get("models"):
+                            symbols = [m["symbol"] for m in models_data["models"]]
+                            st.caption(f"Symbols: {', '.join(symbols[:5])}")
+                    else:
+                        st.warning("No trained models found")
+                else:
+                    st.error("Failed to fetch models status")
+            except Exception as e:
+                st.error(f"Error: {str(e)}")
+        else:
+            st.caption("⚠️ API not connected")
+
+    # System Metrics
+    st.subheader("System Metrics")
+
+    if st.session_state.api_health:
+        try:
+            response = requests.get(f"{API_BASE_URL}/api/v1/monitoring/system", timeout=10)
+            if response.status_code == 200:
+                system_data = response.json()
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    cpu_percent = system_data.get("cpu", {}).get("percent", 0)
+                    st.metric("CPU Usage", f"{cpu_percent:.1f}%")
+
+                with col2:
+                    memory_percent = system_data.get("memory", {}).get("percent", 0)
+                    st.metric("Memory Usage", f"{memory_percent:.1f}%")
+
+                with col3:
+                    disk_percent = system_data.get("disk", {}).get("percent", 0)
+                    st.metric("Disk Usage", f"{disk_percent:.1f}%")
+
+                # Detailed system info
+                with st.expander("System Details"):
+                    st.json(system_data)
+            else:
+                st.warning("Unable to fetch system metrics")
+        except Exception as e:
+            st.error(f"Error fetching system metrics: {str(e)}")
+    else:
+        st.caption("⚠️ API not connected")
+
+    # Data Quality Check
+    st.subheader("Data Quality Check")
+
+    if st.session_state.api_health:
+        symbol_to_check = st.text_input("Enter symbol to check data quality", value="AAPL")
+
+        if st.button("Check Data Quality"):
+            with st.spinner(f"Checking data quality for {symbol_to_check}..."):
+                try:
+                    response = requests.get(
+                        f"{API_BASE_URL}/api/v1/monitoring/data-quality/{symbol_to_check.upper()}",
+                        timeout=15
+                    )
+                    if response.status_code == 200:
+                        quality_data = response.json()
+
+                        status = quality_data.get("status", "unknown")
+                        quality_score = quality_data.get("quality_score", 0)
+
+                        if status == "healthy":
+                            st.success(f"✅ Data Quality: {status.upper()} (Score: {quality_score:.1f}/100)")
+                        else:
+                            st.warning(f"⚠️ Data Quality: {status.upper()} (Score: {quality_score:.1f}/100)")
+
+                        # Show metrics
+                        metrics = quality_data.get("metrics", {})
+                        col1, col2, col3 = st.columns(3)
+
+                        with col1:
+                            st.metric("Total Rows", metrics.get("total_rows", 0))
+
+                        with col2:
+                            st.metric("Missing Values", metrics.get("missing_values", 0))
+
+                        with col3:
+                            completeness = metrics.get("completeness_percent", 0)
+                            st.metric("Completeness", f"{completeness:.1f}%")
+
+                        # Date range
+                        date_range = metrics.get("date_range", {})
+                        st.caption(f"Data range: {date_range.get('start')} to {date_range.get('end')}")
+                    else:
+                        st.error("Failed to check data quality")
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
+    else:
+        st.caption("⚠️ API not connected")
+
+    # System Information
     st.subheader("System Information")
     st.code(f"""
 API Base URL: {API_BASE_URL}
 Dashboard Version: 1.0.0
 Current Time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+API Status: {"Connected" if st.session_state.api_health else "Disconnected"}
     """)
 
 
